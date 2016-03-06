@@ -21,6 +21,7 @@ static DataBaseTool *databasetoll = nil;
     
 }
 
+// 建立表
 - (BOOL)createTable
 {
     __block BOOL createRes = NO;
@@ -31,12 +32,13 @@ static DataBaseTool *databasetoll = nil;
     [db close];
     return createRes;
 }
-
+// 添加学生信息
 - (BOOL)addStudent:(Student *)student;
 {
     [self createTable];
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).lastObject stringByAppendingPathComponent:@"student.db"];
     __block BOOL inserRes = NO;
+    // 这里使用多线程管理的方法来写，防止数据混乱
     FMDatabaseQueue *queue = [FMDatabaseQueue databaseQueueWithPath:path];
     [queue inDatabase:^(FMDatabase *db2) {
         inserRes = [db2 executeUpdate:
@@ -55,8 +57,8 @@ static DataBaseTool *databasetoll = nil;
     }];
     return inserRes;
     
-    
 }
+// 更新学生
 - (BOOL)updateStudent:(Student *)student
 {
     [self createTable];
@@ -84,6 +86,7 @@ static DataBaseTool *databasetoll = nil;
     return updateRes;
     
 }
+// 删除学生
 - (BOOL)deleteStudent:(Student *)student
 {
     [self createTable];
@@ -101,6 +104,7 @@ static DataBaseTool *databasetoll = nil;
     }];
     return deleteRes;
 }
+// 获取学生数据
 - (NSArray *)getStudent:(NSString *)search
 {
     [self createTable];
